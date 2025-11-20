@@ -98,17 +98,25 @@ def rearrange_and_merge_columns(input_csv, column_mapping):
 
         # ---------------------- RENAME BLANK COLUMNS AFTER BUILD ----------------------
         final_cols = []
+        blank_export_map = {}
+        blank_counter = 1
+
         for col in new_df.columns:
             if isinstance(col, str) and col.startswith("blank"):
-                final_cols.append("")     # True blank header
+                display = f"_blank_{blank_counter}"
+                blank_export_map[display] = ""
+                final_cols.append(display)
+                blank_counter += 1
             else:
                 final_cols.append(col)
 
         new_df.columns = final_cols
 
+        export_df = new_df.rename(columns=blank_export_map)
+
         # ---------------------- EXPORT ----------------------
         output_csv = io.BytesIO()
-        new_df.to_csv(output_csv, index=False, encoding='utf-8-sig')
+        export_df.to_csv(output_csv, index=False, encoding='utf-8-sig')
         st.write(new_df)
         output_csv.seek(0)
 
