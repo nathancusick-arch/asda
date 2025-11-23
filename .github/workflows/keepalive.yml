@@ -1,0 +1,29 @@
+name: Streamlit Keepalive (Amend Commit)
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"     # Every 6 hours
+  workflow_dispatch:          # Allow manual triggering
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Update keepalive timestamp
+        run: |
+          echo "Last keepalive: $(date -u)" > .keepalive
+
+      - name: Amend existing commit (no new commit in history)
+        run: |
+          git add .keepalive
+          git commit --allow-empty --amend -m "keepalive (updated $(date -u))"
+          git push --force
