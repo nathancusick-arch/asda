@@ -1,9 +1,12 @@
 name: Streamlit Keepalive (Amend Commit)
 
+permissions:
+  contents: write   # REQUIRED so GitHub Actions can push changes
+
 on:
   schedule:
     - cron: "0 */6 * * *"     # Every 6 hours
-  workflow_dispatch:          # Allow manual triggering
+  workflow_dispatch:
 
 jobs:
   keepalive:
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # REQUIRED for amend + force push
 
       - name: Configure Git
         run: |
@@ -21,9 +26,9 @@ jobs:
       - name: Update keepalive timestamp
         run: |
           echo "Last keepalive: $(date -u)" > .keepalive
-
-      - name: Amend existing commit (no new commit in history)
-        run: |
           git add .keepalive
+
+      - name: Amend last commit and force push
+        run: |
           git commit --allow-empty --amend -m "keepalive (updated $(date -u))"
           git push --force
