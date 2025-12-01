@@ -17,7 +17,6 @@ st.write("""
 
 input_csv = st.file_uploader("whack it in 'ere")
 
-
 def rearrange_and_merge_columns(input_csv, column_mapping):
 
     if input_csv is not None:
@@ -57,22 +56,36 @@ def rearrange_and_merge_columns(input_csv, column_mapping):
         col_handover = "Did the store colleague who served you at the fireworks cabinet, hand over the restricted item without providing ID?"
         fw_mask = df["item_to_order"] == "Fireworks - No ID"
 
+        existing_fw_cols = [c for c in [col_allow, col_handover] if c in df.columns]
         df["merged_no_id_allow_handover"] = None
-        df.loc[fw_mask, "merged_no_id_allow_handover"] = df.loc[fw_mask].apply(
-            lambda row: row[col_allow] if row[col_allow] == "No" else row[col_handover],
-            axis=1
-        )
 
-        df.loc[fw_mask, col_allow] = ""
+        if len(existing_fw_cols) == 2:
+            df.loc[fw_mask, "merged_no_id_allow_handover"] = df.loc[fw_mask].apply(
+                lambda row: row[col_allow] if row[col_allow] == "No" else row[col_handover],
+                axis=1
+            )
+        elif len(existing_fw_cols) == 1:
+            only_col = existing_fw_cols[0]
+            df.loc[fw_mask, "merged_no_id_allow_handover"] = df.loc[fw_mask, only_col]
+        else:
+            pass
+
+        if col_allow in df.columns:
+            df.loc[fw_mask, col_allow] = ""
 
         # ---------------------- MERGE LOGIC FOR ASKED FOR ID ----------------------
         col_checkout_id = "Did the store colleague who served you at the checkout ask you for ID?"
         col_cabinet_id = "If you were able to complete your purchase of the restricted item, did the colleague who served you at the fireworks cabinet, ask you for ID?"
 
-        df["merged_id_asked"] = df[[col_checkout_id, col_cabinet_id]].apply(
-            lambda row: "Yes" if ("Yes" in row.values) else "No",
-            axis=1
-        )
+        existing_cols = [c for c in [col_checkout_id, col_cabinet_id] if c in df.columns]
+
+        if existing_cols:
+            df["merged_id_asked"] = df[existing_cols].apply(
+                lambda row: "Yes" if ("Yes" in row.values) else "No",
+                axis=1
+            )
+        else:
+            df["merged_id_asked"] = pd.NA
 
         # ---------------------- BUILD OUTPUT ----------------------
         new_df = pd.DataFrame()
@@ -162,7 +175,7 @@ column_mapping = {
     "Did the staff member approach you to attend to your till?": "Did the staff member approach you to attend to your till?",
     "Did you make the purchase on your own?": "Did you make the purchase on your own?",
     "Did the store colleague who served you ask your age?": "Did the store colleague who served you ask your age?",
-    "Did the store colleague who served you ask you for ID?": ["Did the driver ask for ID?", "Did the store colleague who served you ask you for ID?", "merged_id_asked"],
+    "Did the store colleague who served you ask you for ID?": ["Did the driver ask for ID?:", "Did the store colleague who served you ask you for ID?", "merged_id_asked"],
     "Please confirm that you did not present any ID:": "Please confirm that you did not present any ID:",
     "Did the store colleague allow you to purchase the restricted item without providing ID?": ["Did the store colleague allow you to purchase the restricted item without providing ID?", "merged_no_id_allow_handover"],
     "Did the store colleague who served you make eye contact with you during the transaction?": ["Did the driver make eye contact with you during the interaction?", "Did the store colleague who served you make eye contact with you during the transaction?", "Did the person who served you make eye contact with you during the collection of your shopping?"],
@@ -187,5 +200,4 @@ column_mapping = {
     "Please confirm in the space below whether or not you were asked for ID, and if so, whether the store colleague who served you allowed the transaction through without you presenting ID:": ["Please confirm below whether or not you were asked for ID:", "Please confirm whether or not you were asked for ID, and if so, at what point during the transaction ID was requested:"]
 }
 
-# Call the function with the CSV file, output file, and the column mapping
 rearrange_and_merge_columns(input_csv, column_mapping)
