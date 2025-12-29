@@ -175,7 +175,7 @@ column_mapping = {
     "Did the staff member approach you to attend to your till?": "Did the staff member approach you to attend to your till?",
     "Did you make the purchase on your own?": "Did you make the purchase on your own?",
     "Did the store colleague who served you ask your age?": "Did the store colleague who served you ask your age?",
-    "Did the store colleague who served you ask you for ID?": ["Did the driver ask for ID?:", "Did the store colleague who served you ask you for ID?", "merged_id_asked"],
+    "Did the store colleague who served you ask you for ID?": ["Did the driver ask for ID?", "Did the store colleague who served you ask you for ID?", "Did the store colleague who served you ask for your ID?", "merged_id_asked"],
     "Please confirm that you did not present any ID:": "Please confirm that you did not present any ID:",
     "Did the store colleague allow you to purchase the restricted item without providing ID?": ["Did the store colleague allow you to purchase the restricted item without providing ID?", "merged_no_id_allow_handover"],
     "Did the store colleague who served you make eye contact with you during the transaction?": ["Did the driver make eye contact with you during the interaction?", "Did the store colleague who served you make eye contact with you during the transaction?", "Did the person who served you make eye contact with you during the collection of your shopping?"],
