@@ -197,7 +197,7 @@ column_mapping = {
     "Please enter the 5-digit TR code:": "Please enter the 5-digit TR code:",
     "Please enter the time from the receipt:": "Please enter the time from the receipt:",
     "Please use this space to explain anything unusual about your visit or to clarify any detail of your report:": "Please use this space to explain anything unusual about your visit or to clarify any detail of your report:",
-    "Please confirm in the space below whether or not you were asked for ID, and if so, whether the store colleague who served you allowed the transaction through without you presenting ID:": ["Please confirm below whether or not you were asked for ID:", "Please confirm whether or not you were asked for ID, and if so, at what point during the transaction ID was requested:"]
+    "Please confirm in the space below whether or not you were asked for ID, and if so, whether the store colleague who served you allowed the transaction through without you presenting ID:": ["Please confirm below whether or not you were asked for ID:", "Please confirm whether or not you were asked for ID, and if so, at what point during the transaction ID was requested:", "Please confirm whether or not your ID was checked, and if so, at what point during the transaction ID was requested:"]
 }
 
 rearrange_and_merge_columns(input_csv, column_mapping)
