@@ -333,6 +333,10 @@ def write_report(workbook, rows):
     """Reuse the previous client report's layout; replace all data with computed values."""
     sheet = workbook[SHEET_NAME]
     styles = [copy(sheet.cell(2, c)._style) for c in range(1, len(REPORT_HEADERS) + 1)]
+    # Preserve the template formatting without Excel's leading-apostrophe marker.
+    for style in styles:
+        if style is not None:
+            style.quotePrefix = 0
     row_height = sheet.row_dimensions[2].height
     for name in list(workbook.sheetnames):
         if name != SHEET_NAME:
@@ -421,7 +425,7 @@ def main():
         return
     try:
         export_data, previous_data = file_bytes(export), file_bytes(previous)
-        report_key = ("fast-v1", hashlib.sha256(export_data).digest(), hashlib.sha256(previous_data).digest(), report_date)
+        report_key = ("fast-v2", hashlib.sha256(export_data).digest(), hashlib.sha256(previous_data).digest(), report_date)
         if st.session_state.get("asda_report_key") != report_key or "asda_report_result" not in st.session_state:
             # Drop stale results before generation, including when new inputs fail validation.
             st.session_state.pop("asda_report_result", None)
