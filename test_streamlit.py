@@ -42,152 +42,37 @@ ALLOW = "Did the store colleague allow you to purchase the restricted item witho
 HANDOVER = "Did the store colleague who served you at the fireworks cabinet, hand over the restricted item without providing ID?"
 
 # The original mapper's question aliases, with surrounding whitespace normalised.
-QUESTION_MAPPING = {'What type of alcohol did you try to purchase?': ['What type of alcohol did you purchase/try to purchase?',
-                                                   'What type of E-cigarette product did you purchase/attempt to '
-                                                   'purchase?',
-                                                   'What type of alcohol did you try to purchase?'],
- 'Please give details of the product that you purchased:': ['Please give details of the alcohol purchased:',
-                                                            'Please give details of the lottery ticket you tried to '
-                                                            'purchase/purchased:',
-                                                            'Please give details of the cigarettes that you tried to '
-                                                            'purchase/purchased:',
-                                                            'Please give details of the alcohol that you tried to '
-                                                            'purchase:',
-                                                            'Please give details of the knife product that you tried '
-                                                            'to purchase/purchased:',
-                                                            'Please give details of the e-cig product that you tried '
-                                                            'to purchase:',
-                                                            'Please give details of the alcohol that you purchased:',
-                                                            'Please give details of the fireworks that you tried to '
-                                                            'purchase:'],
- 'At which type of till was the purchase made?': 'At which type of till was the purchase made?',
- 'Did the staff member approach you to attend to your till?': 'Did the staff member approach you to attend to your '
-                                                              'till?',
- 'Did you make the purchase on your own?': 'Did you make the purchase on your own?',
- 'Did the store colleague who served you ask your age?': 'Did the store colleague who served you ask your age?',
- 'Did the store colleague who served you ask you for ID?': ['Did the driver ask for ID?',
-                                                            'Did the store colleague who served you ask you for ID?',
-                                                            'Did the store colleague who served you ask for your ID?',
-                                                            'Did the store colleague who served you ask for and '
-                                                            'attempt to check your ID?',
-                                                            'merged_id_asked'],
- 'Please confirm that you did not present any ID:': 'Please confirm that you did not present any ID:',
- 'Did the store colleague allow you to purchase the restricted item without providing ID?': ['Did the store colleague '
-                                                                                             'allow you to purchase '
-                                                                                             'the restricted item '
-                                                                                             'without providing ID?',
-                                                                                             'merged_no_id_allow_handover'],
- 'Did the store colleague who served you make eye contact with you during the transaction?': ['Did the driver make eye '
-                                                                                              'contact with you during '
-                                                                                              'the interaction?',
-                                                                                              'Did the store colleague '
-                                                                                              'who served you make eye '
-                                                                                              'contact with you during '
-                                                                                              'the transaction?',
-                                                                                              'Did the person who '
-                                                                                              'served you make eye '
-                                                                                              'contact with you during '
-                                                                                              'the collection of your '
-                                                                                              'shopping?'],
- 'When was eye contact first made?': 'When was eye contact first made?',
- 'What was the gender of the store colleague who served you?': ['What was the gender of the driver?',
-                                                                'What was the gender of the store colleague who served '
-                                                                'you?'],
- 'What was the approximate age of the store colleague who served you?': 'What was the approximate age of the store '
-                                                                        'colleague who served you?',
- 'Please input the approximate height of the server:': ['Please accurately describe the driver:',
-                                                        'Please input the approximate height of the server:',
-                                                        'Please accurately describe the store colleague who served '
-                                                        'you:'],
- "Please input the length of the server's hair:": "Please input the length of the server's hair:",
- 'Please input the style of the server hair:': 'Please input the style of the server hair:',
- 'Please input the hair colour of the server:': 'Please input the hair colour of the server:',
- 'Please select whether the server had any of the following features:': 'Please select whether the server had any of '
-                                                                        'the following features:',
- 'Please input their distinguishing characteristics:': 'Please input their distinguishing characteristics:',
- 'What was the name of the store colleague who served you?': 'What was the name of the store colleague who served you?',
- 'How many people were in the queue?': 'How many people were in the queue?',
- "Were 'Challenge 25' notices visible at the till?": "Were 'Challenge 25' notices visible at the till?",
- 'From the receipt, please enter the 4-digit ST code:': ['On the delivery receipt there is a list of order details, '
-                                                         "please record the 'Order No':",
-                                                         'From the receipt, please enter the 5-digit ST code:',
-                                                         "Enter the 'Order No.':"],
- 'Please enter the 8-digit OP code:': 'Please enter the 6-digit OP code:',
- 'Please enter the 2-digit TE code:': 'Please enter the 2-digit TE code:',
- 'Please enter the 5-digit TR code:': 'Please enter the 5-digit TR code:',
- 'Please enter the time from the receipt:': 'Please enter the time from the receipt:',
- 'Please use this space to explain anything unusual about your visit or to clarify any detail of your report:': 'Please '
-                                                                                                                'use '
-                                                                                                                'this '
-                                                                                                                'space '
-                                                                                                                'to '
-                                                                                                                'explain '
-                                                                                                                'anything '
-                                                                                                                'unusual '
-                                                                                                                'about '
-                                                                                                                'your '
-                                                                                                                'visit '
-                                                                                                                'or to '
-                                                                                                                'clarify '
-                                                                                                                'any '
-                                                                                                                'detail '
-                                                                                                                'of '
-                                                                                                                'your '
-                                                                                                                'report:',
- 'Please confirm in the space below whether or not you were asked for ID, and if so, whether the store colleague who served you allowed the transaction through without you presenting ID:': ['Please '
-                                                                                                                                                                                              'confirm '
-                                                                                                                                                                                              'below '
-                                                                                                                                                                                              'whether '
-                                                                                                                                                                                              'or '
-                                                                                                                                                                                              'not '
-                                                                                                                                                                                              'you '
-                                                                                                                                                                                              'were '
-                                                                                                                                                                                              'asked '
-                                                                                                                                                                                              'for '
-                                                                                                                                                                                              'ID:',
-                                                                                                                                                                                              'Please '
-                                                                                                                                                                                              'confirm '
-                                                                                                                                                                                              'whether '
-                                                                                                                                                                                              'or '
-                                                                                                                                                                                              'not '
-                                                                                                                                                                                              'you '
-                                                                                                                                                                                              'were '
-                                                                                                                                                                                              'asked '
-                                                                                                                                                                                              'for '
-                                                                                                                                                                                              'ID, '
-                                                                                                                                                                                              'and '
-                                                                                                                                                                                              'if '
-                                                                                                                                                                                              'so, '
-                                                                                                                                                                                              'at '
-                                                                                                                                                                                              'what '
-                                                                                                                                                                                              'point '
-                                                                                                                                                                                              'during '
-                                                                                                                                                                                              'the '
-                                                                                                                                                                                              'transaction '
-                                                                                                                                                                                              'ID '
-                                                                                                                                                                                              'was '
-                                                                                                                                                                                              'requested:',
-                                                                                                                                                                                              'Please '
-                                                                                                                                                                                              'confirm '
-                                                                                                                                                                                              'whether '
-                                                                                                                                                                                              'or '
-                                                                                                                                                                                              'not '
-                                                                                                                                                                                              'your '
-                                                                                                                                                                                              'ID '
-                                                                                                                                                                                              'was '
-                                                                                                                                                                                              'checked, '
-                                                                                                                                                                                              'and '
-                                                                                                                                                                                              'if '
-                                                                                                                                                                                              'so, '
-                                                                                                                                                                                              'at '
-                                                                                                                                                                                              'what '
-                                                                                                                                                                                              'point '
-                                                                                                                                                                                              'during '
-                                                                                                                                                                                              'the '
-                                                                                                                                                                                              'transaction '
-                                                                                                                                                                                              'ID '
-                                                                                                                                                                                              'was '
-                                                                                                                                                                                              'requested:']}
+QUESTION_MAPPING = {
+    "What type of alcohol did you try to purchase?": ["What type of alcohol did you purchase/try to purchase?", "What type of E-cigarette product did you purchase/attempt to purchase?", "What type of alcohol did you try to purchase?"],
+    "Please give details of the product that you purchased:": ["Please give details of the alcohol purchased:", "Please give details of the lottery ticket you tried to purchase/purchased:", "Please give details of the cigarettes that you tried to purchase/purchased:", "Please give details of the alcohol that you tried to purchase:", "Please give details of the knife product that you tried to purchase/purchased:", "Please give details of the e-cig product that you tried to purchase:", "Please give details of the alcohol that you purchased:", "Please give details of the fireworks that you tried to purchase:"],
+    "At which type of till was the purchase made?": "At which type of till was the purchase made?",
+    "Did the staff member approach you to attend to your till?": "Did the staff member approach you to attend to your till?",
+    "Did you make the purchase on your own?": "Did you make the purchase on your own?",
+    "Did the store colleague who served you ask your age?": "Did the store colleague who served you ask your age?",
+    "Did the store colleague who served you ask you for ID?": ["Did the driver ask for ID?", "Did the store colleague who served you ask you for ID?", "Did the store colleague who served you ask for your ID?", "Did the store colleague who served you ask for and attempt to check your ID?", "merged_id_asked"],
+    "Please confirm that you did not present any ID:": "Please confirm that you did not present any ID:",
+    "Did the store colleague allow you to purchase the restricted item without providing ID?": ["Did the store colleague allow you to purchase the restricted item without providing ID?", "merged_no_id_allow_handover"],
+    "Did the store colleague who served you make eye contact with you during the transaction?": ["Did the driver make eye contact with you during the interaction?", "Did the store colleague who served you make eye contact with you during the transaction?", "Did the person who served you make eye contact with you during the collection of your shopping?"],
+    "When was eye contact first made?": "When was eye contact first made?",
+    "What was the gender of the store colleague who served you?": ["What was the gender of the driver?", "What was the gender of the store colleague who served you?"],
+    "What was the approximate age of the store colleague who served you?": "What was the approximate age of the store colleague who served you?",
+    "Please input the approximate height of the server:": ["Please accurately describe the driver:", "Please input the approximate height of the server:", "Please accurately describe the store colleague who served you:"],
+    "Please input the length of the server's hair:": "Please input the length of the server's hair:",
+    "Please input the style of the server hair:": "Please input the style of the server hair:",
+    "Please input the hair colour of the server:": "Please input the hair colour of the server:",
+    "Please select whether the server had any of the following features:": "Please select whether the server had any of the following features:",
+    "Please input their distinguishing characteristics:": "Please input their distinguishing characteristics:",
+    "What was the name of the store colleague who served you?": "What was the name of the store colleague who served you?",
+    "How many people were in the queue?": "How many people were in the queue?",
+    "Were 'Challenge 25' notices visible at the till?": "Were 'Challenge 25' notices visible at the till?",
+    "From the receipt, please enter the 4-digit ST code:": ["On the delivery receipt there is a list of order details, please record the 'Order No':", "From the receipt, please enter the 5-digit ST code:", "Enter the 'Order No.':"],
+    "Please enter the 8-digit OP code:": "Please enter the 6-digit OP code:",
+    "Please enter the 2-digit TE code:": "Please enter the 2-digit TE code:",
+    "Please enter the 5-digit TR code:": "Please enter the 5-digit TR code:",
+    "Please enter the time from the receipt:": "Please enter the time from the receipt:",
+    "Please use this space to explain anything unusual about your visit or to clarify any detail of your report:": "Please use this space to explain anything unusual about your visit or to clarify any detail of your report:",
+    "Please confirm in the space below whether or not you were asked for ID, and if so, whether the store colleague who served you allowed the transaction through without you presenting ID:": ["Please confirm below whether or not you were asked for ID:", "Please confirm whether or not you were asked for ID, and if so, at what point during the transaction ID was requested:", "Please confirm whether or not your ID was checked, and if so, at what point during the transaction ID was requested:"],
+}
 
 
 def file_bytes(upload):
@@ -515,11 +400,8 @@ def main():
     st.write("Upload an audit export and the previous week's client report to create the updated report and email text.")
     export = st.file_uploader("Audit export (old or new format)", type=["csv"])
     previous = st.file_uploader("Previous week's report", type=["xlsx"])
-    report_date = st.date_input("Report date (Friday)", value=most_recent_friday())
-    st.caption("Visits are checked from the Monday before the previous report through the selected Friday. Audits already in the previous report, aborts, Mystery Shop and Shrink are excluded.")
-    if report_date.weekday() != 4:
-        st.error("Please select a Friday as the report date.")
-        return
+    report_date = most_recent_friday()
+    st.caption("Visits are checked from the Monday before the previous report through the most recent Friday. Audits already in the previous report, aborts, Mystery Shop and Shrink are excluded.")
     st.caption(f"Export window: {(report_date - timedelta(days=11)):%d/%m/%Y} to {report_date:%d/%m/%Y}, inclusive.")
     if export is None or previous is None:
         return
