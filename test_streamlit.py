@@ -452,7 +452,6 @@ def main():
     st.download_button("Download updated report", result["report"], result["filename"],
                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", on_click="ignore")
     st.subheader("Email text")
-    st.caption("Use the copy button in the top-right corner of the text below.")
     st.code(result["email"], language=None, wrap_lines=True)
     with st.expander("Report preview"):
         st.dataframe(pd.DataFrame(result["rows"], columns=REPORT_HEADERS), hide_index=True, use_container_width=True)
