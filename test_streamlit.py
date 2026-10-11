@@ -398,11 +398,10 @@ def main():
     import streamlit as st
     st.title("Asda Weekly Report Generator")
     st.write("Upload an audit export and the previous week's client report to create the updated report and email text.")
-    export = st.file_uploader("Audit export (old or new format)", type=["csv"])
+    export = st.file_uploader("Audit export", type=["csv"])
     previous = st.file_uploader("Previous week's report", type=["xlsx"])
     report_date = most_recent_friday()
     st.caption("Visits are checked from the Monday before the previous report through the most recent Friday. Audits already in the previous report, aborts, Mystery Shop and Shrink are excluded.")
-    st.caption(f"Export window: {(report_date - timedelta(days=11)):%d/%m/%Y} to {report_date:%d/%m/%Y}, inclusive.")
     if export is None or previous is None:
         return
     try:
