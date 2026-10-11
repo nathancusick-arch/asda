@@ -8,6 +8,7 @@ from copy import copy
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, ROUND_HALF_UP
 import io
+import hashlib
 import re
 from zoneinfo import ZoneInfo
 
@@ -92,10 +93,18 @@ def canonical_header(header):
 def read_export(upload):
     """Coalesce same-title questions, as the old export did, retaining all answers."""
     raw = file_bytes(upload)
+    mapped_titles = {canonical_header(c) for sources in QUESTION_MAPPING.values()
+                     for c in (sources if isinstance(sources, list) else [sources])}
+    required = {"internal_id", "item_to_order", "date_of_visit", "time_of_visit", "primary_result",
+                "order_schedule_type", "site_code", "site_name", "site_post_code", "auditor_internal_id"}
+    needed = required | mapped_titles | {"client_name", CHECKOUT_ID, CABINET_ID, HANDOVER}
+    def use_column(header):
+        # pandas suffixes identical headers with .1, .2 etc.
+        return canonical_header(re.sub(r"\.\d+$", "", header)) in needed
     try:
-        df = pd.read_csv(io.BytesIO(raw), dtype=str, keep_default_na=False, encoding="utf-8-sig")
+        df = pd.read_csv(io.BytesIO(raw), dtype=str, keep_default_na=False, encoding="utf-8-sig", usecols=use_column)
     except UnicodeDecodeError:
-        df = pd.read_csv(io.BytesIO(raw), dtype=str, keep_default_na=False, encoding="cp1252")
+        df = pd.read_csv(io.BytesIO(raw), dtype=str, keep_default_na=False, encoding="cp1252", usecols=use_column)
     groups = {}
     for position, header in enumerate(df.columns):
         # pandas adds .1, .2 etc. to literally duplicated CSV headers.
@@ -104,17 +113,22 @@ def read_export(upload):
             header = base
         groups.setdefault(canonical_header(header), []).append(position)
     columns = {}
-    mapped_titles = {canonical_header(c) for sources in QUESTION_MAPPING.values()
-                     for c in (sources if isinstance(sources, list) else [sources])}
     for title, positions in groups.items():
-        values = df.iloc[:, positions].replace(r"^\s*$", pd.NA, regex=True)
-        conflicts = values.nunique(axis=1, dropna=True).gt(1)
-        if title in mapped_titles and conflicts.any():
+        combined = df.iloc[:, positions[0]]
+        present = combined.str.strip().ne("")
+        combined = combined.where(present, "")
+        conflicts = pd.Series(False, index=df.index) if len(positions) > 1 else None
+        for position in positions[1:]:
+            values = df.iloc[:, position]
+            nonempty = values.str.strip().ne("")
+            if title in mapped_titles:
+                conflicts |= present & nonempty & combined.ne(values)
+            combined = combined.where(present, values.where(nonempty, ""))
+            present |= nonempty
+        if title in mapped_titles and conflicts is not None and conflicts.any():
             raise ValueError(f"Different answers share the question title {title!r} in {int(conflicts.sum())} audit(s). Please check the export.")
-        columns[title] = values.bfill(axis=1).iloc[:, 0].fillna("")
+        columns[title] = combined
     result = pd.DataFrame(columns, index=df.index)
-    required = {"internal_id", "item_to_order", "date_of_visit", "time_of_visit", "primary_result",
-                "order_schedule_type", "site_code", "site_name", "site_post_code", "auditor_internal_id"}
     missing = required - set(result.columns)
     if missing:
         raise ValueError("The export is missing required columns: " + ", ".join(sorted(missing)))
@@ -256,8 +270,7 @@ def proper_store_name(value):
 
 def report_rows(audits):
     rows = []
-    for _, source in audits.iterrows():
-        row = source.to_dict()
+    for row in audits.to_dict(orient="records"):
         item = row["item_to_order"]
         if CHECKOUT_ID in audits.columns or CABINET_ID in audits.columns:
             row["merged_id_asked"] = "Yes" if any(text(row.get(c, "")) == "Yes" for c in (CHECKOUT_ID, CABINET_ID)) else "No"
@@ -333,7 +346,7 @@ def write_report(workbook, rows):
     for row_num, values in enumerate(rows, start=2):
         for column, value in enumerate(values, start=1):
             cell = sheet.cell(row_num, column)
-            cell._style = copy(styles[column - 1])
+            cell._style = styles[column - 1]
             cell.value = value if value != "" else None
             # User-provided text beginning '=' remains text, never an Excel formula.
             if isinstance(value, str) and value:
@@ -403,9 +416,22 @@ def main():
     report_date = most_recent_friday()
     st.caption("Visits are checked from the Monday before the previous report through the most recent Friday. Audits already in the previous report, aborts, Mystery Shop and Shrink are excluded.")
     if export is None or previous is None:
+        st.session_state.pop("asda_report_key", None)
+        st.session_state.pop("asda_report_result", None)
         return
     try:
-        result = generate_report(export, previous, report_date)
+        export_data, previous_data = file_bytes(export), file_bytes(previous)
+        report_key = ("fast-v1", hashlib.sha256(export_data).digest(), hashlib.sha256(previous_data).digest(), report_date)
+        if st.session_state.get("asda_report_key") != report_key or "asda_report_result" not in st.session_state:
+            # Drop stale results before generation, including when new inputs fail validation.
+            st.session_state.pop("asda_report_result", None)
+            st.session_state.pop("asda_report_key", None)
+            with st.spinner("Generating report..."):
+                result = generate_report(export_data, previous_data, report_date)
+            st.session_state["asda_report_result"] = result
+            st.session_state["asda_report_key"] = report_key
+        else:
+            result = st.session_state["asda_report_result"]
     except Exception as error:
         st.error(f"The report could not be generated: {error}")
         return
@@ -424,10 +450,10 @@ def main():
         st.metric("Overall pass rate", percentage(passes, total))
         st.dataframe(pd.DataFrame(result["summary"])[["Product", "Audits", "Pass rate"]], hide_index=True, use_container_width=True)
     st.download_button("Download updated report", result["report"], result["filename"],
-                       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    st.text_area("Email text", result["email"], height=360)
-    st.download_button("Download email text", result["email"].encode("utf-8-sig"),
-                       f"Asda Weekly {report_date:%d.%m.%Y} Email.txt", "text/plain")
+                       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", on_click="ignore")
+    st.subheader("Email text")
+    st.caption("Use the copy button in the top-right corner of the text below.")
+    st.code(result["email"], language=None, wrap_lines=True)
     with st.expander("Report preview"):
         st.dataframe(pd.DataFrame(result["rows"], columns=REPORT_HEADERS), hide_index=True, use_container_width=True)
 
